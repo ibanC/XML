@@ -75,14 +75,14 @@ public class RssParserDom {
                         noticia.setTitulo(texto);
                     } else {
                         if (etiqueta.equals("link")) {
-                            String texto = dato.getNodeValue();
+                            String texto = dato.getFirstChild().getNodeValue();
                             noticia.setLink(texto);
                         } else {
                             if (etiqueta.equals("guid")) {
-                                noticia.setGuid(dato.getNodeValue());
+                                noticia.setGuid(dato.getFirstChild().getNodeValue());
                             } else {
                                 if (etiqueta.equals("pubDate")) {
-                                    noticia.setFecha(dato.getNodeValue());
+                                    noticia.setFecha(dato.getFirstChild().getNodeValue());
                                 }
                             }
                         }

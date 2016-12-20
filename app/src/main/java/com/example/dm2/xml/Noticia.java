@@ -27,6 +27,10 @@ public class Noticia {
         return fecha;
     }
 
+    public String toString() {
+        return titulo;
+    }
+
     public void setTitulo(String t) {
         titulo = t;
     }
@@ -46,4 +50,5 @@ public class Noticia {
     public void setFecha(String f) {
         fecha = f;
     }
+
 }

@@ -1,14 +1,21 @@
 package com.example.dm2.xml;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,13 +25,16 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtResultado;
 
     private ArrayList<Noticia> noticias;
+    private ScrollView scroll;
+    private LinearLayout layout;
+    private ListView lstOpciones;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         btnCargar = (Button) findViewById(R.id.btnCargar);
-        txtResultado = (TextView) findViewById(R.id.txtResultado);
 
         btnCargar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -61,20 +71,38 @@ public class MainActivity extends AppCompatActivity {
 
             //Tratamos la lista de noticias
             //Por ejemplo: escribimos los títulos en pantalla
-            txtResultado.setText("");
-            for(int i=0; i<noticias.size(); i++)
+
+            lstOpciones =(ListView)findViewById(R.id.lista);
+
+            ArrayAdapter<Noticia> adaptador=new ArrayAdapter<Noticia>(MainActivity.this,android.R.layout.simple_list_item_1,noticias);
+
+            lstOpciones.setAdapter(adaptador);
+
+            lstOpciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String opcionSeleccionada=((Noticia)adapterView.getItemAtPosition(i)).getLink();
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(opcionSeleccionada));
+                    startActivity(intent);
+                }
+            });
+
+            /*for(int i=0; i<noticias.size(); i++)
             {
+                
                 /*txtResultado.setText(
                         txtResultado.getText().toString() +
                                 System.getProperty("line.separator") +
                                 noticias.get(i).getTitulo());*/
-                txtResultado.setText(Html.fromHtml("<a href="+noticias.get(i).getLink()+">"+txtResultado.getText().toString() + System.getProperty("line.separator") +
-                        noticias.get(i).getTitulo()+"</a>"));
-               /* String url =noticias.get(i).getLink();
+                /*txtResultado.setText(Html.fromHtml("<a href="+noticias.get(i).getLink()+">"+txtResultado.getText().toString() + System.getProperty("line.separator") +
+                        noticias.get(i).getTitulo()+"</a>"));*/
+              /* String url =noticias.get(i).getLink();
+                Toast.makeText(getApplicationContext(),url,Toast.LENGTH_LONG);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
-                startActivity(intent);*/
-            }
+                startActivity(intent);
+            }*/
         }
     }
 }

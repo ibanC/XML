@@ -22,11 +22,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private Button btnCargar;
-    private TextView txtResultado;
-
     private ArrayList<Noticia> noticias;
-    private ScrollView scroll;
-    private LinearLayout layout;
     private ListView lstOpciones;
 
     @Override

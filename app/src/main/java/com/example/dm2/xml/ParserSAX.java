@@ -1,5 +1,7 @@
 package com.example.dm2.xml;
 
+import android.widget.Toast;
+
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -16,7 +18,11 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class ParserSAX {
     private URL Url;
+    private GestorContenidoXML gestor;
 
+    public GestorContenidoXML getGestor() {
+        return gestor;
+    }
 
     public ParserSAX(String url){
         try {
@@ -26,21 +32,30 @@ public class ParserSAX {
             e.printStackTrace();
         }
     }
-    public void parse()
+    public Dia parse()
     {
         SAXParserFactory factory=SAXParserFactory.newInstance();
-
+        SAXParser parser = null;
         try {
-            SAXParser parser=factory.newSAXParser();
-            GestorContenidoXML gestor=new GestorContenidoXML();
+            parser = factory.newSAXParser();
+            gestor = new GestorContenidoXML();
             parser.parse(this.getInputStream(),gestor);
+            return gestor.getDiaActual();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            Dia d=gestor.getDiaActual();
+            return d;
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
+
+
+       /* Dia d=new Dia();
+        d.setLocalidad("Altsasu");
+        return d;*/
+        return gestor.getDiaActual();
     }
     public InputStream getInputStream(){
         try {

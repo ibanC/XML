@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -18,12 +19,12 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class ParserSAX {
     private URL Url;
-    private GestorContenidoXML gestor;
+    //private GestorContenidoXML gestor;
 
-    public GestorContenidoXML getGestor() {
+    /*public GestorContenidoXML getGestor() {
         return gestor;
     }
-
+*/
     public ParserSAX(String url){
         try {
             this.Url=new URL(url);
@@ -32,30 +33,19 @@ public class ParserSAX {
             e.printStackTrace();
         }
     }
-    public Dia parse()
+    public List<Dia> parse()
     {
         SAXParserFactory factory=SAXParserFactory.newInstance();
-        SAXParser parser = null;
+        SAXParser parser;
         try {
             parser = factory.newSAXParser();
-            gestor = new GestorContenidoXML();
+            GestorContenidoXML gestor = new GestorContenidoXML();
             parser.parse(this.getInputStream(),gestor);
-            return gestor.getDiaActual();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            Dia d=gestor.getDiaActual();
-            return d;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+            return gestor.getDias();
+        } catch (Exception e) {
+           throw new RuntimeException(e);
         }
 
-
-       /* Dia d=new Dia();
-        d.setLocalidad("Altsasu");
-        return d;*/
-        return gestor.getDiaActual();
     }
     public InputStream getInputStream(){
         try {

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private TextView txtlocalidad,txtTempMax,txtTempMin;
-    private Dia hoy;
+    //private Dia hoy;
 
 
     @Override
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
             ParserSAX saxparser =new ParserSAX(params[0]);
 
-            hoy=saxparser.parse();
+            dias=saxparser.parse();
 
 
             return true;

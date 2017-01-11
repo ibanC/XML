@@ -45,20 +45,29 @@ public class Actividad2 extends AppCompatActivity {
         protected Boolean doInBackground(String... params) {
 
             ParserSAX saxparser =new ParserSAX(params[0]);
-
+            hoy = saxparser.parse();
             /*try {
                 hoy = saxparser.parse();
             } catch (SAXException e) {
                 Toast.makeText(getApplicationContext(),"Datos de hoy recopilados",Toast.LENGTH_LONG).show();
             }
 */
-            return true;
+           return true;
         }
         protected  void onPostExecute(Boolean result)
         {
-            txtlocalidad.setText("El tiempo en "+hoy.getlocalidad()+"\tEstado:"+hoy.getEstado_cielo());
-            txtTempMax.setText("Temperatura Máxima:"+hoy.getTemp_Max());
-            txtTempMin.setText("Temperatura Mínima:"+hoy.getTemp_Min());
+            if(hoy!=null)
+            {
+                txtlocalidad.setText(hoy.toString());
+                //txtlocalidad.setText("El tiempo en "+hoy.getlocalidad()+"\tEstado:"+hoy.getEstado_cielo());
+                txtTempMax.setText("Temperatura Máxima:"+hoy.getTemp_Max());
+                txtTempMin.setText("Temperatura Mínima:"+hoy.getTemp_Min());
+            }
+            else
+            {
+                txtlocalidad.setText("Que es nulo copon");
+            }
+
         }
     }
 }

@@ -12,19 +12,19 @@ import java.util.List;
  */
 public class GestorContenidoXML extends DefaultHandler{
 
-    //private ArrayList<Dia> dias;
+    private ArrayList<Dia> dias;
     private Dia diaActual;
     private StringBuilder texto;
     private static int contDia=1;
 
-    public Dia getDiaActual() {
-        return diaActual;
+    public List<Dia> getDias() {
+        return dias;
     }
 
     @Override
     public void startDocument() throws SAXException {
         super.startDocument();
-        //dias=new ArrayList<Dia>();
+        dias=new ArrayList<Dia>();
         texto=new StringBuilder();
     }
 
@@ -35,29 +35,10 @@ public class GestorContenidoXML extends DefaultHandler{
 
        if(localName.equals("dia"))
        {
-           if(contDia<2)
-           {
                diaActual=new Dia();
-               contDia++;
-           }
-        /* else
-           {
-
-               throw new SAXException();
-           }*/
 
        }
-        else
-       {
-           if(localName.equals("estado_cielo"))
-           {
-               String valorhoras = attributes.getValue("periodo");
-               if(valorhoras.equals("00-24"))
-               {
-                   diaActual.setEstado_cielo(attributes.getValue("descripcion"));
-               }
-           }
-       }
+
 
     }
 
@@ -81,20 +62,33 @@ public class GestorContenidoXML extends DefaultHandler{
     public void endElement(String uri, String localName, String qName) throws SAXException {
         super.endElement(uri, localName, qName);
 
-
-        if(localName.equals("nombre"))
+        if(diaActual!=null)
         {
-            diaActual.setLocalidad(texto.toString());
+            if(localName.equals("nombre"))
+            {
+                diaActual.setLocalidad(texto.toString());
+            }
+            else
+            {
+                if(localName.equals("maxima"))
+                {
+                    diaActual.setTemp_Max(11);
+                    //diaActual.setTemp_Min(0);
+                }
+               /* else
+                {
+                   if(localName.equals("estado_cielo"))
+                    {
+                        String valorhoras = attributes.getValue("periodo");
+                        if(valorhoras.equals("00-24"))
+                        {
+                            diaActual.setEstado_cielo(attributes.getValue("descripcion"));
+                        }
+                    }
+                }*/
+            }
         }
-        else
-        {
-             if(localName.equals("temperatura"))
-             {
-                 diaActual.setTemp_Max(11);
-                 diaActual.setTemp_Min(0);
-             }
-        }
-        texto.setLength(0);
+            texto.setLength(0);
     }
 
 }

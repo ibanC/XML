@@ -19,54 +19,56 @@ import android.widget.Toast;
 
 import org.xml.sax.SAXException;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Actividad2 extends AppCompatActivity {
 
-    private TextView txtlocalidad,txtTempMax,txtTempMin;
+    private TextView txtdatos;//,txtTempMax,txtTempMin;
     private Dia hoy;
+    private List<Dia> dias;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad2);
-        txtlocalidad=(TextView)findViewById(R.id.localidad);
-        txtTempMax=(TextView)findViewById(R.id.tempMax);
-        txtTempMin=(TextView)findViewById(R.id.tempMin);
+        txtdatos=(TextView)findViewById(R.id.localidad);
+       /* txtTempMax=(TextView)findViewById(R.id.tempMax);
+        txtTempMin=(TextView)findViewById(R.id.tempMin);*/
 
         CargarXmlTask tarea = new CargarXmlTask();
         tarea.execute("http://www.aemet.es/xml/municipios/localidad_31010.xml");
     }
     //Tarea Asíncrona para cargar un XML en segundo plano
-      private class CargarXmlTask extends AsyncTask<String,Integer,Boolean> {
+    private class CargarXmlTask extends AsyncTask<String,Integer,Boolean> {
 
 
         protected Boolean doInBackground(String... params) {
 
             ParserSAX saxparser =new ParserSAX(params[0]);
-            hoy = saxparser.parse();
-            /*try {
-                hoy = saxparser.parse();
-            } catch (SAXException e) {
-                Toast.makeText(getApplicationContext(),"Datos de hoy recopilados",Toast.LENGTH_LONG).show();
-            }
-*/
-           return true;
+
+            dias=saxparser.parse();
+
+
+            return true;
         }
         protected  void onPostExecute(Boolean result)
         {
+            hoy=dias.get(0);
             if(hoy!=null)
             {
-                txtlocalidad.setText(hoy.toString());
-                //txtlocalidad.setText("El tiempo en "+hoy.getlocalidad()+"\tEstado:"+hoy.getEstado_cielo());
-                txtTempMax.setText("Temperatura Máxima:"+hoy.getTemp_Max());
-                txtTempMin.setText("Temperatura Mínima:"+hoy.getTemp_Min());
+                txtdatos.setText("El tiempo en"+hoy.getlocalidad()+".Fecha:"+hoy.getFecha()+"\nTemperatura Máxima:"+hoy.getTemp_Max()
+                        +"\nTemperatura Mínima:"+hoy.getTemp_Min());
             }
             else
             {
-                txtlocalidad.setText("Que es nulo copon");
+
+                txtdatos.setText("Hoy es null");
             }
+
+
 
         }
     }

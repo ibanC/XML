@@ -2,12 +2,14 @@ package com.example.dm2.xml;
 
 import android.widget.Toast;
 
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,15 +39,21 @@ public class ParserSAX {
     {
         SAXParserFactory factory=SAXParserFactory.newInstance();
         SAXParser parser;
+        GestorContenidoXML gestor = new GestorContenidoXML();
         try {
             parser = factory.newSAXParser();
-            GestorContenidoXML gestor = new GestorContenidoXML();
-            parser.parse(this.getInputStream(),gestor);
+            InputSource is = new InputSource(this.getInputStream());
+            is.setEncoding("ISO-8859-1");
+            parser.parse(is,gestor);
             return gestor.getDias();
         } catch (Exception e) {
-           throw new RuntimeException(e);
+           throw new RuntimeException();
         }
-
+       /* Dia d=new Dia();
+        d.setLocalidad("Vitoria");
+        ArrayList<Dia> di=new ArrayList<Dia>();
+        di.add(d);
+        return di;*/
     }
     public InputStream getInputStream(){
         try {

@@ -1,5 +1,7 @@
 package com.example.dm2.xml;
 
+import android.util.Log;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -15,7 +17,7 @@ public class GestorContenidoXML extends DefaultHandler{
     private ArrayList<Dia> dias;
     private Dia diaActual;
     private StringBuilder texto;
-    private static int contDia=1;
+    private boolean datosPrimerDia=false;
 
     public List<Dia> getDias() {
         return dias;
@@ -26,6 +28,8 @@ public class GestorContenidoXML extends DefaultHandler{
         super.startDocument();
         dias=new ArrayList<Dia>();
         texto=new StringBuilder();
+        diaActual=new Dia();
+
     }
 
 
@@ -33,11 +37,17 @@ public class GestorContenidoXML extends DefaultHandler{
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         super.startElement(uri, localName, qName, attributes);
 
-       if(localName.equals("dia"))
-       {
-               diaActual=new Dia();
+        Log.e("etiqueta",localName);
+           if(localName.equals("dia")&&datosPrimerDia==false)
+           {
+             int length= attributes.getLength();
+               for (int i = 0; i < length; i++) {
+                   String value = attributes.getValue(i);
+                   diaActual.setFecha(value);
+               }
 
-       }
+           }
+
 
 
     }
@@ -55,6 +65,7 @@ public class GestorContenidoXML extends DefaultHandler{
     @Override
     public void endDocument() throws SAXException {
         super.endDocument();
+        dias.add(diaActual);
 
     }
 
@@ -62,33 +73,36 @@ public class GestorContenidoXML extends DefaultHandler{
     public void endElement(String uri, String localName, String qName) throws SAXException {
         super.endElement(uri, localName, qName);
 
-        if(diaActual!=null)
-        {
+        Log.e("etiqueta",localName);
+
             if(localName.equals("nombre"))
             {
-                diaActual.setLocalidad(texto.toString());
+                diaActual.setLocalidad(texto.toString().replaceAll("\n",""));
             }
             else
             {
-                if(localName.equals("maxima"))
-                {
-                    diaActual.setTemp_Max(11);
-                    //diaActual.setTemp_Min(0);
-                }
-               /* else
-                {
-                   if(localName.equals("estado_cielo"))
+                    if(localName.equals("maxima")&&datosPrimerDia==false)
                     {
-                        String valorhoras = attributes.getValue("periodo");
-                        if(valorhoras.equals("00-24"))
+                        diaActual.setTemp_Max(texto.toString().replaceAll("\n","").replaceAll("\t",""));
+                        //diaActual.setTemp_Min(0);
+                    }
+                    else
+                    {
+                        if(localName.equals("minima")&&datosPrimerDia==false)
                         {
-                            diaActual.setEstado_cielo(attributes.getValue("descripcion"));
+                            diaActual.setTemp_Min(texto.toString().replaceAll("\n","").replaceAll("\t",""));
+                            /*ya hemos recopilado los datos de hoy
+                             */
+                            datosPrimerDia=true;
+                          // elementoActual="";
                         }
                     }
-                }*/
             }
+        texto.setLength(0);
+
         }
-            texto.setLength(0);
+
+
     }
 
-}
+//}

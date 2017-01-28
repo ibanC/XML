@@ -4,42 +4,45 @@ package com.example.dm2.xml;
  * Created by iban on 30/12/2016.
  */
 public class Dia {
-    private String estado_cielo;
-    private int temp_Max;
-    private int temp_Min;
+    private String fecha;
+    private String temp_Max;
+    private String temp_Min;
     private String localidad;
 
-    public String getEstado_cielo() {
-        return estado_cielo;
+    public String getFecha() {
+        return fecha;
     }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
     public String getlocalidad() {
         return localidad;
     }
 
-    public void setEstado_cielo(String estado_cielo) {
-        this.estado_cielo = estado_cielo;
-    }
+
     public void setLocalidad(String localidad) {
         this.localidad = localidad;
     }
-    public int getTemp_Max() {
+    public String getTemp_Max() {
         return temp_Max;
     }
 
-    public void setTemp_Max(int temp_Max) {
+    public void setTemp_Max(String temp_Max) {
         this.temp_Max = temp_Max;
     }
 
-    public int getTemp_Min() {
+    public String getTemp_Min() {
         return temp_Min;
     }
 
-    public void setTemp_Min(int temp_Min) {
+    public void setTemp_Min(String temp_Min) {
         this.temp_Min = temp_Min;
     }
 
     @Override
     public String toString() {
-        return "pepe";
+        return localidad;
     }
 }
